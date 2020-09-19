@@ -51,199 +51,216 @@ class _IngredientState extends State<ingredientList> {
                 child: StreamBuilder<QuerySnapshot>(
                   stream: Provider.of<Info>(context).getIngr(),
                   builder: (context, snapshot) {
-                    if(snapshot==null)
-                      {
-                        return Text("List is empty");
-                      }
+                    if (snapshot == null) {
+                      return Text("List is empty");
+                    }
                     else {
-                      print(snapshot.data.toString());
-                      return ListView.builder(
-                          itemCount: snapshot.data.documents.length,
-                          itemBuilder: (_, int position) {
-                            DocumentSnapshot item = snapshot.data
-                                .documents[position];
-                            print(item.documentID);
-                            share+=item.documentID+" "+item["qty"].toStringAsFixed(2)+" "+item["uom"]+"\n";
-                            //var name = items["ingrName"];
-                            return Builder(
-                              builder: (context) =>
-                              (Dismissible(
-                                  key: Key(item.documentID),
-                                  onDismissed: (direction) {
-                                    // Remove the item from the data source.
-                                    setState(() {
-                                      Provider.of<Info>(context, listen: false)
-                                          .handleIngr(
-                                          item.documentID, item["qty"], 0);
-                                    });
-                                    Scaffold.of(context).showSnackBar(SnackBar(
-                                      content: Text(
-                                          '$item.docuementId deleted'),
-                                      duration: Duration(seconds: 3),
-                                    ));
-                                  },
+                      if (snapshot.data.documents.length == 0)
+                        return Text("List is empty");
+                      else {
+                        print(snapshot.data.toString());
+                        return ListView.builder(
+                            itemCount: snapshot.data.documents.length,
+                            itemBuilder: (_, int position) {
+                              DocumentSnapshot item = snapshot.data
+                                  .documents[position];
+                              print(item.documentID);
+                              // ignore: deprecated_member_use
+                              share += item.documentID + " " +
+                                  item.get("qty").toStringAsFixed(2) + " " +
+                                  item.get("uom") + "\n";
+                              //var name = items["ingrName"];
+                              return Builder(
+                                builder: (context) =>
+                                (Dismissible(
+                                    key: Key(item.documentID),
+                                    onDismissed: (direction) {
+                                      // Remove the item from the data source.
+                                      setState(() {
+                                        Provider.of<Info>(
+                                            context, listen: false)
+                                            .handleIngr(
+                                            item.documentID, item.get("qty"), 0);
+                                      });
+                                      Scaffold.of(context).showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                                '$item.docuementId deleted'),
+                                            duration: Duration(seconds: 3),
+                                          ));
+                                    },
 
-                                  // Show a red background as the item is swiped away.
-                                  background: Container(color: Colors.red),
-                                  child:
-                                  //SingleChildScrollView(
-                                  //scrollDirection: Axis.horizontal,
-                                  //child: Row(
-                                  // children: <Widget>[
-                                  Container(
-                                    constraints: BoxConstraints(
-                                        maxHeight: double.infinity,
-                                        minHeight: 100),
-                                    // margin:const EdgeInsets.fromLTRB(0,20,0,20),
-                                    //height: 120,
+                                    // Show a red background as the item is swiped away.
+                                    background: Container(color: Colors.red),
+                                    child:
+                                    //SingleChildScrollView(
+                                    //scrollDirection: Axis.horizontal,
+                                    //child: Row(
+                                    // children: <Widget>[
+                                    Container(
+                                      constraints: BoxConstraints(
+                                          maxHeight: double.infinity,
+                                          minHeight: 100),
+                                      // margin:const EdgeInsets.fromLTRB(0,20,0,20),
+                                      //height: 120,
 
-                                    child: Row(children: <Widget>[
-                                      Checkbox(
-                                        value: item["key"],
-                                        onChanged: (bool val) {
-                                          print("change");
-                                          print(position);
-                                          print(item["key"]);
-                                          // if(keys[position]==true) {
-                                          print(item["key"]);
-                                          setState(() {
-                                            print(item["key"]);
-                                            bool val = false;
-                                            if (item["key"] == false)
-                                              val = true;
-                                            else
-                                              val = false;
-                                            Provider.of<Info>(
-                                                context, listen: false)
-                                                .toggleCheck(
-                                                item.documentID, val);
-                                          });
-                                        },
-                                        activeColor: Colors.green,
-                                        checkColor: Colors.white,
-                                      ),
-                                      Container(
-                                        margin: const EdgeInsets.fromLTRB(
-                                            10, 20, 0, 0),
-                                        child: Column(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                            crossAxisAlignment: CrossAxisAlignment
-                                                .start,
-                                            children: <Widget>[
-                                              Container(
-                                                  width: 250,
-                                                  child: Column(
-                                                      crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                      children: <Widget>[
-                                                        Text(item.documentID,
-                                                            style: TextStyle(
-                                                                fontSize: 20,
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .bold))
-                                                      ])),
-                                              Row(children: <Widget>[
+                                      child: Row(children: <Widget>[
+                                        Checkbox(
+                                          value: item.get("key"),
+                                          onChanged: (bool val) {
+                                            print("change");
+                                            print(position);
+                                            print(item.get("key"));
+                                            // if(.get("key")eys[position]==true) {
+                                            print(item.get("key"));
+                                            setState(() {
+                                              print(item.get("key"));
+                                              bool val = false;
+                                              if (item.get("key") == false)
+                                                val = true;
+                                              else
+                                                val = false;
+                                              Provider.of<Info>(
+                                                  context, listen: false)
+                                                  .toggleCheck(
+                                                  item.documentID, val);
+                                            });
+                                          },
+                                          activeColor: Colors.green,
+                                          checkColor: Colors.white,
+                                        ),
+                                        Container(
+                                          margin: const EdgeInsets.fromLTRB(
+                                              10, 20, 0, 0),
+                                          child: Column(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                              crossAxisAlignment: CrossAxisAlignment
+                                                  .start,
+                                              children: <Widget>[
                                                 Container(
-                                                  width: 175,
-                                                  margin: const EdgeInsets
-                                                      .fromLTRB(
-                                                      0, 5, 0, 15),
-                                                  child: Text(
-                                                      item["qty"]
-                                                          .toStringAsFixed(2) +
-                                                          "  " +
-                                                          item["uom"],
-                                                      style: TextStyle(
-                                                          fontSize: 15)),
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets.all(
-                                                      0),
-                                                  child: Container(
-                                                      height: 30,
-                                                      width: 30,
-                                                      alignment: Alignment
-                                                          .bottomCenter,
-                                                      decoration: BoxDecoration(
-                                                        border: Border.all(
-                                                          color: Colors.green,
-                                                        ),
-                                                        borderRadius:
-                                                        BorderRadius.circular(
-                                                            50),
-                                                      ),
-                                                      margin:
-                                                      EdgeInsets.fromLTRB(
-                                                          0, 0, 20, 0),
-                                                      child: IconButton(
-                                                          icon: FaIcon(
-                                                            Icons.remove,
-                                                            color: Colors.green,
-                                                            size: 12,
-                                                          ),
-                                                          onPressed: () {
-                                                            Provider.of<Info>(
-                                                                context,
-                                                                listen: false)
-                                                                .handleIngr(
-                                                                item.documentID,
-                                                                -1,
-                                                                -1);
-                                                          })),
-                                                ),
-                                                Container(
+                                                    width: 250,
+                                                    child: Column(
+                                                        crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                        children: <Widget>[
+                                                          Text(item.documentID,
+                                                              style: TextStyle(
+                                                                  fontSize: 20,
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .bold))
+                                                        ])),
+                                                Row(children: <Widget>[
+                                                  Container(
+                                                    width: 175,
+                                                    margin: const EdgeInsets
+                                                        .fromLTRB(
+                                                        0, 5, 0, 15),
                                                     child: Text(
-                                                        item["qty"]
-                                                            .toStringAsFixed(2),
+                                                        item.get("qty")
+                                                            .toStringAsFixed(
+                                                            2) +
+                                                            "  " +
+                                                            item.get("uom"),
                                                         style: TextStyle(
-                                                            color: Colors
-                                                                .green))),
-                                                Padding(
-                                                  padding: const EdgeInsets.all(
-                                                      0),
-                                                  child: Container(
-                                                      height: 30,
-                                                      width: 30,
-                                                      decoration: BoxDecoration(
-                                                        border: Border.all(
-                                                          color: Colors.green,
-                                                        ),
-                                                        borderRadius:
-                                                        BorderRadius.circular(
-                                                            50),
-                                                      ),
-                                                      margin:
-                                                      EdgeInsets.fromLTRB(
-                                                          20, 0, 20, 0),
-                                                      child: IconButton(
-                                                          icon: Icon(
-                                                            Icons.add,
+                                                            fontSize: 15)),
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                        .all(
+                                                        0),
+                                                    child: Container(
+                                                        height: 30,
+                                                        width: 30,
+                                                        alignment: Alignment
+                                                            .bottomCenter,
+                                                        decoration: BoxDecoration(
+                                                          border: Border.all(
                                                             color: Colors.green,
-                                                            size: 12,
                                                           ),
-                                                          onPressed: () {
-                                                            Provider.of<Info>(
-                                                                context,
-                                                                listen: false)
-                                                                .handleIngr(
-                                                                item.documentID,
-                                                                1,
-                                                                1);
-                                                          })),
-                                                ),
-                                              ])
-                                            ]),
-                                      ),
+                                                          borderRadius:
+                                                          BorderRadius.circular(
+                                                              50),
+                                                        ),
+                                                        margin:
+                                                        EdgeInsets.fromLTRB(
+                                                            0, 0, 20, 0),
+                                                        child: IconButton(
+                                                            icon: FaIcon(
+                                                              Icons.remove,
+                                                              color: Colors
+                                                                  .green,
+                                                              size: 12,
+                                                            ),
+                                                            onPressed: () {
+                                                              Provider.of<Info>(
+                                                                  context,
+                                                                  listen: false)
+                                                                  .handleIngr(
+                                                                  item
+                                                                      .documentID,
+                                                                  -1,
+                                                                  -1);
+                                                            })),
+                                                  ),
+                                                  Container(
+                                                      child: Text(
+                                                          item.get("qty")
+                                                              .toStringAsFixed(
+                                                              2),
+                                                          style: TextStyle(
+                                                              color: Colors
+                                                                  .green))),
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                        .all(
+                                                        0),
+                                                    child: Container(
+                                                        height: 30,
+                                                        width: 30,
+                                                        decoration: BoxDecoration(
+                                                          border: Border.all(
+                                                            color: Colors.green,
+                                                          ),
+                                                          borderRadius:
+                                                          BorderRadius.circular(
+                                                              50),
+                                                        ),
+                                                        margin:
+                                                        EdgeInsets.fromLTRB(
+                                                            20, 0, 20, 0),
+                                                        child: IconButton(
+                                                            icon: Icon(
+                                                              Icons.add,
+                                                              color: Colors
+                                                                  .green,
+                                                              size: 12,
+                                                            ),
+                                                            onPressed: () {
+                                                              Provider.of<Info>(
+                                                                  context,
+                                                                  listen: false)
+                                                                  .handleIngr(
+                                                                  item
+                                                                      .documentID,
+                                                                  1,
+                                                                  1);
+                                                            })),
+                                                  ),
+                                                ])
+                                              ]),
+                                        ),
 
-                                      //Text:Text(),
-                                    ]),
-                                  ))),
-                            );
-                          });
-                    }}
-                )),
+                                        //Text:Text(),
+                                      ]),
+                                    ))),
+                              );
+                            });
+                      }
+                    }
+                  })),
             Container(
               height: height*0.09,
               child: Stack(

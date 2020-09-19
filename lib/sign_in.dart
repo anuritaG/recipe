@@ -1,11 +1,14 @@
+
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:recipe/auth.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn googleSignIn = GoogleSignIn();
 
-Future<String> signInWithGoogle() async {
+Future<User> signInWithGoogle() async {
 
   final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
   final GoogleSignInAuthentication googleSignInAuthentication =
@@ -16,15 +19,17 @@ Future<String> signInWithGoogle() async {
     idToken: googleSignInAuthentication.idToken,
   );
 
-  final AuthResult authResult = await _auth.signInWithCredential(credential);
-  final FirebaseUser user = authResult.user;
+  final UserCredential authResult = await _auth.signInWithCredential(credential);
+  final User user = authResult.user;
 
   assert(!user.isAnonymous);
   assert(await user.getIdToken() != null);
 
-  final FirebaseUser currentUser = await _auth.currentUser();
+  final User currentUser = await _auth.currentUser;
 
   assert(user.uid == currentUser.uid);
+  print(user.photoUrl);
+  print(user.displayName);
   //await DatabaseService(uid:user.uid).updateUser("h");
   //await(user.get().getName());
   print(credential);
@@ -36,7 +41,7 @@ Future<String> signInWithGoogle() async {
   //print(user.name);
 
   //return snapshot;
-  return user.uid;
+  return user;
 
 }
 

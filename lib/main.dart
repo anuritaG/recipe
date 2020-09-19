@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe/settings.dart';
@@ -25,7 +26,13 @@ import 'user_profile.dart';
 import 'login_page.dart';
 import 'notifier.dart';*/
 
-void main() => runApp(MyApp());
+//void main() => runApp(MyApp());
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
+
 //void main()=>runApp(ItemDetail("tea"));
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -66,6 +73,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 }
 class MyApp extends StatelessWidget {
   @override
+
   Widget build(BuildContext context) {
 
 

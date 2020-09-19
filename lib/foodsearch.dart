@@ -112,7 +112,7 @@ class _ExamplePageState extends State<ExamplePage> {
             onTap: () {
               print(filteredNames[index]);
               Navigator.of(context).pop();
-              Navigator.of(context).pushNamed('itemDetail',arguments: filteredNames[index]);
+              Navigator.of(context).pushNamed('test',arguments: filteredNames[index]);
             }
         );
       },

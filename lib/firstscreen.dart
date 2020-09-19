@@ -37,9 +37,9 @@ class MainMenuState extends State<MainMenu> {
                   Align(
                     alignment: Alignment.center,
                     child: new Image(
-                      image: new AssetImage("assets/first_screen_logo.jpg"),
-                      height: 120,
-                      width: 120,
+                      image: new AssetImage("assets/changedfoodie.png"),
+                      height: 200,
+                      width: 300,
                     ),
                   ),
                 ),
@@ -149,11 +149,14 @@ class MainMenuState extends State<MainMenu> {
           //do something
         },
         color: Colors.grey,
-        child: Row(children: <Widget>[
-          Text("Access Your Existing Lists",
-            style: TextStyle(fontSize: 18),),
-        ],
-        ),
+      //  child: Row(children: <Widget>[
+         child: Align(
+            alignment: Alignment.center,
+            child: Text("Access Your Existing Lists",
+              style: TextStyle(fontSize: 18),textAlign: TextAlign.center,),
+          ),
+       /* ],
+        ),*/
       ),
     );
 

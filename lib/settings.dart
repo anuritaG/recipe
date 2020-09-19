@@ -93,6 +93,8 @@ class Settings extends StatelessWidget {
       child: FlatButton(
         onPressed: () {
           signOutGoogle();
+          //Navigator.popUntil(context, ModalRoute.withName("/"));
+          Navigator.pushNamed(context,'/');
           //do something
         },
         color: Colors.grey,

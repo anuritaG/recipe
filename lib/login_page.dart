@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 //import 'notifier.dart';
@@ -56,17 +57,21 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              new Text.rich(
-                TextSpan(
-                  children: <TextSpan>[
-                    TextSpan(text: 'The Foodie App', style: TextStyle(fontWeight: FontWeight.bold)),
-                  ],
+              Align(
+                alignment: Alignment.center,
+                child: new Text.rich(
+                  TextSpan(
+                    children: <TextSpan>[
+
+                      TextSpan(text: 'The Foodie App', style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22,)),
+                    ],
+                  ),
                 ),
               ),
               new Image(
-                  image: new AssetImage("assets/first_screen_logo.jpg"),
-                  height: 170,
-                  width: 170
+                  image: new AssetImage("assets/foodiediff.JPG"),
+                  height: 300,
+                  width: 300
               ),
               SizedBox(height: 50),
               _signInButton(),
@@ -109,9 +114,15 @@ class _LoginPageState extends State<LoginPage> {
         var username;
         signInWithGoogle().then((user) async {
           username = user;
+          var id= user.uid;
+          print("id"+id);
+          print(id.toString());
+          var name=user.displayName;
+          var photo=user.photoUrl;
+
           print(user);
           print("hey");
-          await Provider.of<Info>(context).getId(user);
+          await Provider.of<Info>(context).getDetails(id,name,photo);
           Navigator.pushNamed(context, 'first');
          // await Provider.of<Info>(context).getID(user);
           print(user);

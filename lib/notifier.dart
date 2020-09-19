@@ -7,25 +7,40 @@ import 'package:http/http.dart' as http;
 
 class Info extends ChangeNotifier {
    String uid;
+   String name;String photo;
+   String getName()
+   {
+     return this.name;
+   }
+   String getPhoto()
+   {
+     return this.photo;
+   }
    final CollectionReference user_history=Firestore.instance.collection("User_History");
    //user_history.document(uid).collection('Food_List').snapshots();
    Stream<QuerySnapshot> getFood()
    {
-     return user_history.document(uid).collection('Food_List').snapshots();
+     print(uid);
+
+     return user_history.doc(uid).collection('Food_List').snapshots();
    }
    Stream<QuerySnapshot> getIngr()
    {
      print(uid);
-     return user_history.document(uid).collection('Ingr_List').snapshots();
+     return user_history.doc(uid).collection('Ingr_List').snapshots();
    }
    Future<void> toggleCheck(String ingr,bool value)
    {
-     print(user_history.document(uid).collection('Ingr_List').document(ingr).updateData({'key':value}));
+     print(user_history.doc(uid).collection('Ingr_List').document(ingr).updateData({'key':value}));
    }
-   Future<void> getId(String uid)
+   Future<void> getDetails(String uid,String name,String photo)
    async {
      this.uid=uid;
+     this.name=name;
+     this.photo=photo;
+     print("this is the uid"+this.uid);
      print(this.uid);
+     print(this.name);
      print("noid");
       await user_history.document(uid).setData({});
     /*await  print(user_history.document(uid).collection('Food_List').getDocuments());
@@ -43,7 +58,7 @@ class Info extends ChangeNotifier {
        'qty':FieldValue.increment(qty),
        'uom':uom,
        'key':false,
-     },merge: true);
+     },SetOptions(merge: true));
    }
    Future<void> deleteAll() async
    {
@@ -65,7 +80,7 @@ class Info extends ChangeNotifier {
      else{
      await user_history.document(uid).collection('Ingr_List').document(ingr).updateData({'qty':FieldValue.increment(qty)});
      DocumentSnapshot ds=await user_history.document(uid).collection('Ingr_List').document(ingr).get();
-     if(ds["qty"]<=0)
+     if(ds.get("qty")<=0)
        await user_history.document(uid).collection('Ingr_List').document(ingr).delete();
      }
    }
@@ -78,8 +93,8 @@ class Info extends ChangeNotifier {
      print("yg");
      DocumentSnapshot ds=await user_history.document(uid).collection('Food_List').document(food).get();
      print(ds.toString());
-     print(ds["qty"]);
-     if(ds["qty"]==0)
+     print(ds.get("qty"));
+     if(ds.get("qty")==0)
        await user_history.document(uid).collection('Food_List').document(food).delete();
      print("hg");
    var url =
@@ -91,6 +106,7 @@ class Info extends ChangeNotifier {
    print(responseJson["hits"][0]["recipe"]["ingredients"]);
    await addIngr(responseJson["hits"][0]["recipe"]["ingredients"],qty,flag);
  }
+
   Future<void> addFood(String food,int qty,String serving,String image,List<dynamic> ingr)
   async {
     List as=[1,2];
@@ -100,7 +116,7 @@ class Info extends ChangeNotifier {
     'qty':FieldValue.increment(qty),
     'serving':serving,
     'image':image,
-  },merge: true);
+  },SetOptions(merge: true));
  await addIngr(ingr,qty,1);
  // user_history.document(uid).collection('Food_List').document('pizza').updateData({'no':FieldValue.increment(25)});
    //user_history.document(uid).setData({'Fsa':"ads"},merge: true);
@@ -109,7 +125,7 @@ class Info extends ChangeNotifier {
   }
  List<dynamic> getIngrDetails(List<dynamic> ingr) {
     print(ingr);
-    List res;
+    List res=[];
     //print("Add"+qtyfood.toString());
     for (int i = 0; i < ingr.length; i++) {
       //var ingredient=ingr.elementAt(i);
@@ -215,12 +231,32 @@ class Info extends ChangeNotifier {
       }
       print("this is final" + ingrName + qty.toString() + " " + uom);
       res.add({
-        "ingrName": ingrName,
-        "ingrQty": qty,
+        "Name": ingrName,
+        "Qty": qty,
         "uom": uom,
 
       });
     }
+    return res;
+  }
+  List<dynamic> getNutrients(Map<String,dynamic> nut)
+  {
+    List res=[];
+    print(nut);
+    List temp=nut.values.toList();
+    for(int i=0;i<temp.length;i++)
+      {
+        res.add({
+          "Name": temp.elementAt(i)["label"],
+          "Qty": temp.elementAt(i)["quantity"],
+          "uom": temp.elementAt(i)["unit"],
+
+        });
+      }
+    print("res");
+    print(res);
+    print("res");
+
     return res;
   }
 Future<void> addIngr(List<dynamic> ingr,int qtyfood,int flag)
@@ -338,19 +374,19 @@ async {
        'qty':FieldValue.increment(qty*qtyfood),
        'uom':uom,
         'key':false,
-     },merge: true);}
+     },SetOptions(merge: true));}
      else
        {
          print("flag");
          DocumentSnapshot ds=await user_history.document(uid).collection('Ingr_List').document(ingrName).get();
         print(ingrName);
         print("name");
-        print(ds["qty"]);
+        print(ds.get("qty"));
         print(qty);
         print(qtyfood);
-        print(ds["qty"]+(qty*qtyfood));
-         if(ds["qty"]+(qty*qtyfood)<=0) {
-           print(ds["qty"]-(qty*qtyfood));
+        print(ds.get("qty")+(qty*qtyfood));
+         if(ds.get("qty")+(qty*qtyfood)<=0) {
+           print(ds.get("qty")-(qty*qtyfood));
            print("ingrName");
            print(ingrName);
            user_history.document(uid).collection('Ingr_List')
@@ -362,7 +398,7 @@ async {
              'qty':FieldValue.increment(qty*qtyfood),
              'uom':uom,
              'key':false,
-           },merge: true);}
+           },SetOptions(merge: true));}
        }
     // print(ingredient);
    }

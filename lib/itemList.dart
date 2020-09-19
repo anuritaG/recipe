@@ -68,17 +68,20 @@ class itemList extends StatelessWidget {
                       if(snapshot==null)
                         return Text("List id empty");
                       else {
+                        print(snapshot.data.toString());
+                        print("data");
+                        print(snapshot.data.docs[0].id);
                         //print(values.length);
                         return ListView.builder(
-                          itemCount: snapshot.data.documents.length,
+                          itemCount: snapshot.data.docs.length,
                           itemBuilder: (_, int position) {
                             DocumentSnapshot item = snapshot.data
-                                .documents[position];
-                            print(item["id"].toString());
+                                .docs[position];
+                            print(item.id);
                             //print(d)
-                            print(item.documentID);
+                            print(item.id);
                             print(item.data);
-                            print(item["qty"].toString());
+                            print(item.get("qty").toString());
                             print(item.toString());
                             //var item=snapshot.data.documents[position];
                             print(item);
@@ -121,10 +124,10 @@ class itemList extends StatelessWidget {
                                                         image: new DecorationImage(
                                                           fit: BoxFit.cover,
                                                           image: new NetworkImage(
-                                                              item["image"] ==
+                                                              item.get("image")==
                                                                   null
                                                                   ? ""
-                                                                  : item["image"]),
+                                                                  : item.get("image")),
                                                         )),
                                                     margin: EdgeInsets.all(8),
                                                     //alignment: Alignment.centerRight,
@@ -159,10 +162,10 @@ class itemList extends StatelessWidget {
                                                             .fromLTRB(
                                                             25, 10, 20, 0),
                                                         child: Text(
-                                                            item["qty"]
+                                                            item.get("qty")
                                                                 .toString() +
                                                                 " " +
-                                                                item["serving"],
+                                                                item.get("serving"),
                                                             style: new TextStyle(
                                                               fontSize: 12,
                                                             )),
@@ -196,7 +199,7 @@ class itemList extends StatelessWidget {
                                                                   .handleFood(
                                                                   item
                                                                       .documentID,
-                                                                  -item["qty"],
+                                                                  -item.get("qty"),
                                                                   0);
                                                               /* Provider.of<Info>(context, listen: false)
                                                                 .deleteFood(item["foodName"],
@@ -244,7 +247,7 @@ class itemList extends StatelessWidget {
                                                                 Icons
                                                                     .play_circle_outline,
                                                                 color: Colors
-                                                                    .lightGreen,
+                                                                    .red,
                                                                 size: width *
                                                                     0.05,
                                                               ),

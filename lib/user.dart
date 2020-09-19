@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'firstscreen.dart';
+import 'notifier.dart';
 import 'settings.dart';
 
 class UserProfile extends StatelessWidget {
   @override
 
   Widget build(BuildContext context) {
+    var photo= Provider.of<Info>(context).getPhoto();
+    print( Provider.of<Info>(context).getPhoto(),);
     Widget titleSection = Container(
       padding: const EdgeInsets.all(32),
       child: Row(
@@ -19,7 +23,7 @@ class UserProfile extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: Text(
-                    'Your Profile',
+                      Provider.of<Info>(context).getName(),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -37,12 +41,27 @@ class UserProfile extends StatelessWidget {
     Color color = Colors.green[500];
 
     Widget buttonSection = Container(
-      child: Row(
+      width: 200,
+      height: 200,
+      padding: const EdgeInsets.all(10),
+
+      decoration: BoxDecoration(
+
+
+        shape: BoxShape.circle,
+
+        image: new DecorationImage(
+            fit: BoxFit.cover,
+            image: NetworkImage(photo),
+        )
+      ),
+      /*child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _buildButtonColumn(color, Icons.portrait, 'Profile Picture'),
+
+         // _buildButtonColumn(color, Icons.portrait, 'Profile Picture'),
         ],
-      ),
+      ),*/
     );
 
     Widget listButtonSection = Container(
@@ -95,7 +114,7 @@ class UserProfile extends StatelessWidget {
           ),
           title: Text(''),
         ),
-        body: ListView(
+        body: Column(
           children: [
             titleSection,
             buttonSection,
